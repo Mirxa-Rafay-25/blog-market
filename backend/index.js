@@ -32,6 +32,8 @@ app.use("/api/users",userRoute)
 app.use("/api/posts",postRoute)
 app.use("/api/comments",commentRoute)
 
+app.options('*', cors()); 
+
 app.get("/",(req,res)=>{
     res.send("server is running");
 })
