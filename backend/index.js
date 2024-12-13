@@ -32,6 +32,10 @@ app.use("/api/users",userRoute)
 app.use("/api/posts",postRoute)
 app.use("/api/comments",commentRoute)
 
+app.get("/",(req,res)=>{
+    res.send("server is running");
+})
+
 app.listen(process.env.PORT,()=>{
     connectDB()
     console.log("app is running on port "+process.env.PORT)
