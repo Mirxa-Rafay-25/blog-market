@@ -25,7 +25,7 @@ const connectDB= async ()=>{
 // middlewares
 dotenv.config()
 app.use(express.json())
-app.use(cors({origin:"http://localhost:5173",credentials:true}))
+app.use(cors({origin:"https://blog-market-frontend.vercel.app/",credentials:true}))
 app.use(cookieParser())
 app.use("/api/auth",authRoute)
 app.use("/api/users",userRoute)
