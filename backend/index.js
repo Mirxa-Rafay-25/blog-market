@@ -25,14 +25,19 @@ const connectDB= async ()=>{
 // middlewares
 dotenv.config()
 app.use(express.json())
-app.use(cors({origin:"https://blog-market-frontend.vercel.app/",credentials:true}))
+const corsOptions = {
+    origin: 'https://blog-market-frontend.vercel.app', // Allow your frontend domain
+    methods: 'GET,POST,PUT,DELETE', // Specify allowed methods
+    credentials: true, // Allow cookies if needed
+  };
 app.use(cookieParser())
 app.use("/api/auth",authRoute)
 app.use("/api/users",userRoute)
 app.use("/api/posts",postRoute)
 app.use("/api/comments",commentRoute)
 
-app.options('*', cors()); 
+app.options('*', cors(corsOptions)); // Allow preflight requests
+
 
 app.get("/",(req,res)=>{
     res.send("server is running");
