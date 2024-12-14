@@ -2,7 +2,9 @@ import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useState } from "react";
 import axios from "axios";
-import { URL } from "../url";
+
+// Centralize the backend URL (use .env if possible)
+const URL = "https://blog-market-backend.vercel.app";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -11,19 +13,25 @@ const Register = () => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
+  // Function to handle registration
   const handleRegister = async () => {
     if (!username || !email || !password) {
       setError(true);
       return;
     }
     try {
-      console.log({ username, email, password }); // Debugging
-      const res = await axios.post(URL + "/api/auth/register", {
-        username,
-        email,
-        password,
-      });
-      console.log(res.data);
+      console.log("Sending data:", { username, email, password });
+      const res = await axios.post(
+        `${URL}/api/auth/register`, // Backend API URL
+        { username, email, password },
+        {
+          withCredentials: true, // Allow cross-origin cookies (if needed)
+          headers: {
+            "Content-Type": "application/json", // Ensure proper content type
+          },
+        }
+      );
+      console.log("Registration successful:", res.data);
       setError(false);
       navigate("/login");
     } catch (err) {
@@ -69,7 +77,11 @@ const Register = () => {
           >
             Register
           </button>
-          {error && <h3 className="text-red-500 text-sm">Something went wrong</h3>}
+          {error && (
+            <h3 className="text-red-500 text-sm">
+              Something went wrong. Please try again.
+            </h3>
+          )}
           <div className="flex justify-center items-center space-x-3">
             <p>Already have an account?</p>
             <p className="text-gray-500 hover:text-black">
