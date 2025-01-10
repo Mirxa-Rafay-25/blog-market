@@ -2,9 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useState } from "react";
 import axios from "axios";
+import { URL } from "../url";
 
-// Centralize the backend URL (use .env if possible)
-const URL = "https://blog-market-backend.vercel.app";
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -13,32 +12,23 @@ const Register = () => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
 
-  // Function to handle registration
-  const handleRegister = async () => {
-    if (!username || !email || !password) {
-      setError(true);
-      return;
+  const handleRegister=async ()=>{
+    
+    try{
+      const res=await axios.post(URL+"/api/auth/register",{username,email,password})
+      setUsername(res.data.username)
+      setEmail(res.data.email)
+      setPassword(res.data.password)
+      setError(false)
+      navigate("/login")
+      
     }
-    try {
-      console.log("Sending data:", { username, email, password });
-      const res = await axios.post(
-        `${URL}/api/auth/register`, // Backend API URL
-        { username, email, password },
-        {
-          withCredentials: true, // Allow cross-origin cookies (if needed)
-          headers: {
-            "Content-Type": "application/json", // Ensure proper content type
-          },
-        }
-      );
-      console.log("Registration successful:", res.data);
-      setError(false);
-      navigate("/login");
-    } catch (err) {
-      console.error("Error registering user:", err);
-      setError(true);
+    catch(err){
+      setError(true)
+      console.log(err)
     }
-  };
+
+  }
 
   return (
     <>
